@@ -9,7 +9,7 @@ const setAuthHeader = (token) => {
   goItApi.defaults.headers.common.Authorization = `Bearer ${token}`;
 };
 
-const clearAuthHeader = () => {
+const deleteAuthHeader = () => {
   goItApi.defaults.headers.common.Authorization = "";
 };
 
@@ -39,30 +39,31 @@ export const login = createAsyncThunk(
   }
 );
 
-export const logout = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
-  try {
-    await goItApi.post("/users/logout");
-    clearAuthHeader();
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error.message);
+export const logout = createAsyncThunk(
+  "auth/logout",
+  async (credentials, thunkAPI) => {
+    try {
+      await goItApi.post("/users/logout", credentials);
+      deleteAuthHeader();
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
   }
-});
+);
 
 export const refreshUser = createAsyncThunk(
   "auth/refreshUser",
   async (_, thunkAPI) => {
     const stateToken = thunkAPI.getState().auth.token;
-    console.log(thunkAPI.getState());
-    console.log(thunkAPI.getState().auth.token);
 
     if (!stateToken) {
-      return thunkAPI.rejectWithValue("unable to fetch user");
+      return thunkAPI.rejectWithValue("reject");
     }
+    console.log(stateToken);
+
     try {
       setAuthHeader(stateToken);
       const { data } = await goItApi.get("/users/current");
-      console.log(data);
-
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);

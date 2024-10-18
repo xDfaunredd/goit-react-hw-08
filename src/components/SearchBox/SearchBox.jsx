@@ -1,12 +1,10 @@
-import { useId } from "react";
 import { useDispatch } from "react-redux";
 
 import s from "./SearchBox.module.css";
 import { changeFilter } from "../../redux/filters/slice";
+import { TextField } from "@mui/material";
 
 const SearchBox = () => {
-  const findPersonId = useId();
-
   const dispatch = useDispatch();
 
   const handleChange = (e) => {
@@ -15,12 +13,12 @@ const SearchBox = () => {
 
   return (
     <div className={s.container}>
-      <label htmlFor={findPersonId}>Find contacts by name</label>
-      <input
+      <TextField
         type="text"
-        id={findPersonId}
         onChange={handleChange}
-        className={s.input}
+        id="standard-basic"
+        label="Search your contact"
+        variant="standard"
       />
     </div>
   );

@@ -6,8 +6,8 @@ const ContactsPage = () => {
   return (
     <div>
       <ContactFrom />
-      <ContactList />
       <SearchBox />
+      <ContactList />
     </div>
   );
 };

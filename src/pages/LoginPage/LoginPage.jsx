@@ -1,9 +1,10 @@
 import { Field, Form, Formik } from "formik";
 import { useId } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import s from "./LoginPage.module.css";
+
 import { login } from "../../redux/auth/operations";
-import { selectUser } from "../../redux/auth/selectors";
-import { useNavigate } from "react-router-dom";
+import { Button } from "@mui/material";
 import toast from "react-hot-toast";
 
 const initialValues = {
@@ -12,40 +13,49 @@ const initialValues = {
 };
 
 const LoginPage = () => {
-  const navigate = useNavigate();
-
   const emailId = useId();
   const passwordId = useId();
 
   const dispatch = useDispatch();
 
-  const user = useSelector(selectUser);
-  console.log(user.name);
-
   const handleSubmit = (values, options) => {
-    console.log(values);
+    if (values.email.trim() === "" || values.password.trim() === "") {
+      return toast.error("Fill all fields");
+    }
     dispatch(login(values))
       .unwrap()
-      .then((res) => {
-        toast(`Welcome ${res.user.name}`);
-        navigate("/contacts");
+      .then((data) => {
+        toast.success(`Welcome ${data.user.name} ;)`);
       })
       .catch(() => {
-        toast.error("Invalid credentials");
+        toast.error("Invalid authorization");
       });
     options.resetForm();
   };
 
   return (
-    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-      <Form>
-        <label htmlFor={emailId}>Email</label>
-        <Field name="email" type="email" id={emailId} />
-        <label htmlFor={passwordId}>Password</label>
-        <Field name="password" type="password" id={passwordId} />
-        <button type="submit">Submit</button>
-      </Form>
-    </Formik>
+    <div className={s.container}>
+      <div>
+        <h2>LogIn now!</h2>
+        <p>Welcome to us</p>
+      </div>
+      <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+        <Form className={s.form}>
+          <label htmlFor={emailId}>Email</label>
+          <Field name="email" type="email" id={emailId} className={s.input} />
+          <label htmlFor={passwordId}>Password</label>
+          <Field
+            name="password"
+            type="password"
+            id={passwordId}
+            className={s.input}
+          />
+          <Button type="submit" variant="contained">
+            Submit
+          </Button>
+        </Form>
+      </Formik>
+    </div>
   );
 };
 

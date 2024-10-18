@@ -5,26 +5,30 @@ import Home from "../../pages/Home/Home";
 import LoginPage from "../../pages/LoginPage/LoginPage";
 import RegistrationPage from "../../pages/RegistrationPage/RegistrationPage";
 import ContactsPage from "../../pages/ContactsPage/ContactsPage";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { refreshUser } from "../../redux/auth/operations";
 import PrivateRoute from "../PrivateRoute";
 import ResrictedRoute from "../ResrictedRoute";
+import { selectIsRefreshing } from "../../redux/auth/selectors";
 
 function App() {
   const dispatch = useDispatch();
 
+  const isRefreshing = useSelector(selectIsRefreshing);
+
   useEffect(() => {
     dispatch(refreshUser());
   }, [dispatch]);
-  return (
+
+  return isRefreshing ? null : (
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route path="/" element={<Home />} />
         <Route
           path="login"
           element={
-            <ResrictedRoute component={LoginPage} renavigateTo="/contacts" />
+            <ResrictedRoute component={LoginPage} redirectTo="/contacts" />
           }
         />
         <Route
@@ -32,14 +36,14 @@ function App() {
           element={
             <ResrictedRoute
               component={RegistrationPage}
-              renavigateTo="/contacts"
+              redirectTo="/contacts"
             />
           }
         />
         <Route
           path="contacts"
           element={
-            <PrivateRoute component={ContactsPage} renavigateTo="/login" />
+            <PrivateRoute component={ContactsPage} redirectTo="/login" />
           }
         />
       </Route>
