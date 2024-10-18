@@ -8,10 +8,11 @@ import ContactsPage from "../../pages/ContactsPage/ContactsPage";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { refreshUser } from "../../redux/auth/operations";
-import PrivateRoute from "../PrivateRoute";
-import ResrictedRoute from "../ResrictedRoute";
+
 import { selectIsRefreshing } from "../../redux/auth/selectors";
 import Error from "../../pages/Error/Error";
+import ResrictedRoute from "../_redirects/ResrictedRoute";
+import PrivateRoute from "../_redirects/PrivateRoute";
 
 function App() {
   const dispatch = useDispatch();
