@@ -11,6 +11,7 @@ import { refreshUser } from "../../redux/auth/operations";
 import PrivateRoute from "../PrivateRoute";
 import ResrictedRoute from "../ResrictedRoute";
 import { selectIsRefreshing } from "../../redux/auth/selectors";
+import Error from "../../pages/Error/Error";
 
 function App() {
   const dispatch = useDispatch();
@@ -48,7 +49,7 @@ function App() {
         />
       </Route>
 
-      <Route path="*" element={<h1>NOT FOUND 404</h1>} />
+      <Route path="*" element={<Error />} />
     </Routes>
   );
 }
