@@ -28,7 +28,14 @@ const RegistrationPage = () => {
       return toast.error("Fill all fields");
     }
     console.log(values);
-    dispatch(register(values));
+    dispatch(register(values))
+      .unwrap()
+      .then((data) => {
+        toast.success(`Welcome ${data.user.name} ;)`);
+      })
+      .catch(() => {
+        toast.error("Invalid authorization");
+      });
     options.resetForm();
   };
 
